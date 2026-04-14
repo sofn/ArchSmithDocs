@@ -63,7 +63,7 @@ AppForge/
 │       │   └── error/               # Error controller
 │       └── resources/
 │           ├── application.yaml          # Shared base configuration
-│           ├── application-dev.yaml      # Dev profile (H2, embedded Redis)
+│           ├── application-dev.yaml      # Dev profile (Testcontainers PostgreSQL, Redis, MinIO)
 │           ├── application-test.yaml.example
 │           ├── application-prod.yaml.example
 │           ├── db/migration/             # Flyway migration scripts
@@ -75,15 +75,15 @@ AppForge/
 ├── dependencies/                    # Centralized version management
 │   └── build.gradle.kts            # java-platform BOM
 │
-├── scripts/                         # Deployment files
-│   ├── docker-compose.yml           # JVM mode deployment
-│   ├── docker-compose.native.yml    # Native Image deployment
+├── docker/                          # Deployment files
+│   ├── jvm/                         # JVM mode with Project Leyden CDS
+│   ├── native/                      # Native Image (BellSoft Liberica NIK 25)
 │   ├── nginx/default.conf           # Nginx reverse proxy config
 │   ├── start.sh                     # One-click startup script
 │   └── .env.example                 # Environment variable template
 │
-├── Dockerfile                       # JVM Docker image
-└── Dockerfile.native                # GraalVM Native Docker image
+├── Dockerfile                       # JVM Docker image (Leyden CDS)
+└── Dockerfile.native                # Native Docker image (Liberica NIK 25)
 ```
 
 ## Frontend (AppForgeAdmin)

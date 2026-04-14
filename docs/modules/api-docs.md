@@ -88,6 +88,14 @@ location /v3/api-docs {
 | Operation Logs | `/admin-api/operation-logs/*` | 3 endpoints |
 | Login Logs | `/admin-api/login-logs/*` | 3 endpoints |
 | Server Monitor | `/admin-api/server-info` | 1 endpoint |
+| File Management | `/admin-api/file/*` | 2 endpoints |
+
+### File Upload/Download
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/admin-api/file/upload` | Upload a file (local or S3/MinIO backend) |
+| GET | `/admin-api/file/download/{id}` | Download a file by ID |
 
 ### RESTful System API (`/system/`)
 

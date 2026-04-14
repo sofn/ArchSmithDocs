@@ -6,11 +6,11 @@ AppForge uses [Flyway](https://flywaydb.org/) to manage database schema migratio
 
 | Environment | DDL Management | Data Initialization | Flyway |
 |-------------|---------------|-------------------|--------|
-| **dev** | Hibernate DDL `auto=update` | InitDbMockServer (H2 seed SQL) | Disabled |
+| **dev** | Hibernate DDL `auto=update` | InitDbMockServer (seed SQL) | Disabled |
 | **test** | Flyway migration | Flyway V2 seed data | Enabled |
 | **prod** | Flyway migration | Flyway V2 seed data (first deploy) | Enabled |
 
-In development, Hibernate automatically creates and updates tables against the H2 database. For test and production, Flyway takes full control of schema management while Hibernate only validates the schema (`ddl-auto: validate`).
+In development, Hibernate automatically creates and updates tables against the Testcontainers PostgreSQL database. For test and production, Flyway takes full control of schema management while Hibernate only validates the schema (`ddl-auto: validate`).
 
 ## Migration Scripts
 
@@ -54,17 +54,17 @@ Create a new file in `server-admin/src/main/resources/db/migration/`:
 ```sql
 -- V4__add_audit_log_table.sql
 CREATE TABLE IF NOT EXISTS sys_audit_log (
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id          BIGSERIAL PRIMARY KEY,
     user_id     BIGINT       NOT NULL,
     action      VARCHAR(100) NOT NULL,
     detail      TEXT,
-    created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
 ### Step 2: Verify in Dev
 
-In dev mode (H2 + Hibernate DDL auto), add the corresponding JPA entity and verify that the entity mapping is correct. Flyway is disabled in dev, so the migration script itself is not executed.
+In dev mode (Testcontainers PostgreSQL + Hibernate DDL auto), add the corresponding JPA entity and verify that the entity mapping is correct. Flyway is disabled in dev, so the migration script itself is not executed.
 
 ### Step 3: Test in Test Environment
 
@@ -88,7 +88,7 @@ Flyway executes only the new incremental migrations.
 
 ```bash
 # 1. Create the database
-mysql -u root -p -e "CREATE DATABASE appforge_test DEFAULT CHARSET utf8mb4;"
+psql -U postgres -c "CREATE DATABASE appforge_test;"
 
 # 2. Configure the profile
 cd server-admin/src/main/resources
@@ -111,7 +111,7 @@ SELECT * FROM flyway_schema_history ORDER BY installed_rank;
 
 ```bash
 # 1. Create database (on master, replication handles slave)
-mysql -h <master-host> -u root -p -e "CREATE DATABASE appforge DEFAULT CHARSET utf8mb4;"
+psql -h <master-host> -U postgres -c "CREATE DATABASE appforge;"
 
 # 2. Configure the profile
 cd server-admin/src/main/resources
@@ -129,7 +129,7 @@ SPRING_PROFILES_ACTIVE=prod java -jar server-admin.jar
    └─ server-admin/src/main/resources/db/migration/V{N}__description.sql
 
 2. Dev environment validation
-   └─ H2 + Hibernate DDL auto — verify entity compatibility
+   └─ Testcontainers PostgreSQL + Hibernate DDL auto — verify entity compatibility
 
 3. Test environment validation
    └─ Deploy to test, Flyway executes, verify SQL correctness
@@ -143,17 +143,17 @@ SPRING_PROFILES_ACTIVE=prod java -jar server-admin.jar
 1. **Backup**: Always backup the database before running migrations
 2. **Code Review**: Migration scripts must go through code review
 3. **Rollback**: Flyway Community Edition doesn't support auto-rollback — prepare rollback SQL manually
-4. **Large tables**: For `ALTER TABLE` on large tables, consider `pt-online-schema-change`
+4. **Large tables**: For `ALTER TABLE` on large tables, consider using `pg_repack` or `CREATE INDEX CONCURRENTLY`
 5. **Secrets**: `application-prod.yaml` is gitignored — never commit it
 
 ### Manual Rollback
 
 ```bash
 # Execute reverse SQL
-mysql -h <master-host> -u root -p appforge < rollback_V4.sql
+psql -h <master-host> -U appforge -d appforge -f rollback_V4.sql
 
 # Fix Flyway history
-mysql -h <master-host> -u root -p appforge -e \
+psql -h <master-host> -U appforge -d appforge -c \
   "DELETE FROM flyway_schema_history WHERE version = '4';"
 ```
 
@@ -171,7 +171,7 @@ app-forge:
   flyway:
     enabled: false              # Flyway disabled
   embedded:
-    h2-init: true               # Load seed data via InitDbMockServer
+    postgresql: true            # Start PostgreSQL via Testcontainers
 ```
 
 ### Test / Prod Profile
@@ -192,7 +192,7 @@ app-forge:
 When using Docker Compose, Flyway runs automatically on application startup:
 
 ```bash
-cd scripts
+cd docker
 
 # JVM mode
 docker compose up -d --build

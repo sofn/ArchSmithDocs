@@ -6,14 +6,14 @@ Get AppForge running locally in under 5 minutes.
 
 | Tool | Version | Check Command |
 |------|---------|---------------|
-| Java | 21+ | `java -version` |
+| Java | 25+ (Azul Zulu recommended) | `java -version` |
 | Node.js | 20+ | `node -v` |
 | pnpm | 9+ | `pnpm -v` |
 | Git | any | `git --version` |
-| Docker | (optional) | `docker -v` |
+| Docker | required | `docker -v` |
 
 ::: tip
-Make sure `JAVA_HOME` points to a JDK 21 installation. You can verify with:
+Make sure `JAVA_HOME` points to a JDK 25 installation. Docker is required for Testcontainers (PostgreSQL, Redis, MinIO auto-start in dev mode). You can verify with:
 ```bash
 echo $JAVA_HOME
 java -version
@@ -40,8 +40,9 @@ cd AppForge
 ```
 
 The dev profile activates automatically, using:
-- **H2** file-based database (no MySQL needed)
-- **Embedded Redis** (no Redis installation needed)
+- **Testcontainers PostgreSQL** — auto-started via Docker (no manual DB setup needed)
+- **Testcontainers Redis** — auto-started via Docker (no Redis installation needed)
+- **Testcontainers MinIO** — S3-compatible file storage auto-started via Docker
 - **Hibernate DDL auto** for schema creation
 - Pre-loaded seed data (admin user, roles, menus, etc.)
 

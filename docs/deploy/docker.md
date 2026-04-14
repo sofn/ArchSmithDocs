@@ -1,6 +1,6 @@
 # Docker Deployment
 
-AppForge provides two Docker Compose deployment modes: **Native Image** (GraalVM) for production and **JVM** for development/testing.
+AppForge provides two Docker Compose deployment modes: **Native Image** (BellSoft Liberica NIK 25) for production and **JVM** (Project Leyden CDS) for development/testing.
 
 ## Deployment Modes
 
@@ -20,28 +20,29 @@ AppForge provides two Docker Compose deployment modes: **Native Image** (GraalVM
                                                │
                                     ┌──────────┴──────────┐
                                     │                     │
-                              ┌─────┴─────┐         ┌────┴────┐
-                              │MySQL(:3306)│         │Redis(:6379)│
-                              └───────────┘         └─────────┘
+                              ┌─────┴──────┐        ┌────┴────┐
+                              │PostgreSQL   │        │Redis(:6379)│
+                              │(:5432)      │        └─────────┘
+                              └────────────┘
 ```
 
 ## Quick Start
 
 ```bash
-cd AppForge/scripts
+cd AppForge/docker
 
 # Default: Native Image mode
 ./start.sh
 
 # Or specify mode explicitly
-./start.sh native   # GraalVM Native Image
-./start.sh jvm      # Standard JVM
+./start.sh native   # BellSoft Liberica NIK 25 Native Image
+./start.sh jvm      # Project Leyden CDS (JVM with Class Data Sharing)
 ```
 
 Or use `docker compose` directly:
 
 ```bash
-cd AppForge/scripts
+cd AppForge/docker
 
 # Native mode
 docker compose -f docker-compose.native.yml up -d --build
@@ -60,7 +61,7 @@ cp .env.example .env
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `DB_ROOT_PASSWORD` | `123` | MySQL root password |
+| `DB_PASSWORD` | `123` | PostgreSQL password |
 | `JWT_SECRET` | (built-in dev key) | JWT signing secret |
 
 ## Service Ports
@@ -69,20 +70,24 @@ cp .env.example .env
 |---------|------|-------------|
 | Frontend (Nginx) | 80 | Admin panel |
 | Backend (AppForge) | 8080 | REST API |
-| MySQL | 3306 | Database |
+| PostgreSQL | 5432 | Database |
 | Redis | 6379 | Cache |
 
 ## File Structure
 
 ```
-scripts/
-├── docker-compose.yml          # JVM mode
-├── docker-compose.native.yml   # Native mode (default)
+docker/
+├── jvm/
+│   ├── docker-compose.yml          # JVM mode with Project Leyden CDS
+│   └── Dockerfile                  # JVM Dockerfile with CDS optimization
+├── native/
+│   ├── docker-compose.native.yml   # Native mode (BellSoft Liberica NIK 25)
+│   └── Dockerfile                  # Native image Dockerfile
 ├── nginx/
-│   └── default.conf            # Nginx reverse proxy config
-├── start.sh                    # One-click startup script
-├── .env.example                # Environment variable template
-└── logs/                       # Application logs (created at runtime)
+│   └── default.conf                # Nginx reverse proxy config
+├── start.sh                        # One-click startup script
+├── .env.example                    # Environment variable template
+└── logs/                           # Application logs (created at runtime)
 ```
 
 ## Nginx Configuration
@@ -122,9 +127,9 @@ server {
 }
 ```
 
-## Native vs JVM Comparison
+## Native (Liberica NIK 25) vs JVM (Leyden CDS) Comparison
 
-| Metric | Native | JVM |
+| Metric | Native (Liberica NIK 25) | JVM (Leyden CDS) |
 |--------|--------|-----|
 | First build time | ~10 minutes | ~2 minutes |
 | Docker image size | ~100MB | ~350MB |
@@ -137,9 +142,9 @@ server {
 
 Both compose files define four services:
 
-1. **mysqldb**: MySQL 8 with health check and persistent volume
+1. **postgresdb**: PostgreSQL 17 with health check and persistent volume
 2. **redis**: Redis 7 Alpine with health check
-3. **appforge**: Backend application (depends on mysqldb and redis being healthy)
+3. **appforge**: Backend application (depends on postgresdb and redis being healthy)
 4. **appforge-admin**: Frontend Nginx container (depends on appforge)
 
 The backend container receives all datasource configuration via environment variables:
@@ -148,11 +153,11 @@ The backend container receives all datasource configuration via environment vari
 environment:
   SPRING_PROFILES_ACTIVE: prod
   SPRING_DATA_REDIS_HOST: redis
-  DB_USERNAME: root
-  DB_PASSWORD: ${DB_ROOT_PASSWORD:-123}
+  DB_USERNAME: appforge
+  DB_PASSWORD: ${DB_PASSWORD:-123}
   JWT_SECRET: ${JWT_SECRET:-...}
-  SPRING_DATASOURCE_DYNAMIC_DATASOURCE_USER_MASTER_URL: jdbc:mysql://mysqldb:3306/appforge?...
-  SPRING_DATASOURCE_DYNAMIC_DATASOURCE_USER_SLAVE_URL: jdbc:mysql://mysqldb:3306/appforge?...
+  SPRING_DATASOURCE_DYNAMIC_DATASOURCE_USER_MASTER_URL: jdbc:postgresql://postgresdb:5432/appforge
+  SPRING_DATASOURCE_DYNAMIC_DATASOURCE_USER_SLAVE_URL: jdbc:postgresql://postgresdb:5432/appforge
 ```
 
 ## Managing the Deployment

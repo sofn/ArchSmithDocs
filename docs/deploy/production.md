@@ -8,9 +8,9 @@ A checklist and guide for deploying AppForge to a production environment.
 |---|------|----------|-------|
 | 1 | Change JWT secret | **Critical** | Generate a new HMAC-SHA512 key |
 | 2 | Change RSA private key | **Critical** | Generate a new RSA key pair |
-| 3 | Change MySQL password | **Critical** | Use a strong password |
+| 3 | Change PostgreSQL password | **Critical** | Use a strong password |
 | 4 | Enable captcha | High | Set `app-forge.captcha.enabled: true` |
-| 5 | Configure MySQL (master/slave) | High | Set up replication if needed |
+| 5 | Configure PostgreSQL (master/slave) | High | Set up replication if needed |
 | 6 | Configure Redis | High | Use a dedicated Redis instance |
 | 7 | Enable Flyway | High | Set `app-forge.flyway.enabled: true` |
 | 8 | Set JPA DDL to validate | High | `spring.jpa.hibernate.ddl-auto: validate` |
@@ -79,13 +79,13 @@ spring:
       primary: user_master
       datasource:
         user_master:
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://master:3306/appforge?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://master:5432/appforge
           username: ${DB_USERNAME}
           password: ${DB_PASSWORD}
         user_slave:
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://slave:3306/appforge?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://slave:5432/appforge
           username: ${DB_USERNAME}
           password: ${DB_PASSWORD}
   data:
@@ -105,7 +105,7 @@ app-forge:
     enabled: true
   embedded:
     redis: false                 # Use real Redis
-    h2-init: false               # No seed data
+    postgresql: false            # Use real PostgreSQL
 
 management:
   tracing:
@@ -118,9 +118,9 @@ management:
 ### First Deployment
 
 ```bash
-# Create database on MySQL master
-mysql -h <master-host> -u root -p -e \
-  "CREATE DATABASE appforge DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+# Create database on PostgreSQL master
+psql -h <master-host> -U postgres -c \
+  "CREATE DATABASE appforge;"
 
 # Start application — Flyway creates all tables and seeds data
 SPRING_PROFILES_ACTIVE=prod java -jar server-admin.jar
@@ -178,13 +178,13 @@ If using AWS ALB, GCP Load Balancer, or similar, terminate SSL at the load balan
 
 ```bash
 # Daily automated backup
-mysqldump -h <master-host> -u root -p appforge | gzip > backup_$(date +%Y%m%d).sql.gz
+pg_dump -h <master-host> -U appforge appforge | gzip > backup_$(date +%Y%m%d).sql.gz
 ```
 
 ### Application Backup
 
-- Docker volumes for MySQL data: `mysql-data`
-- Application logs: `scripts/logs/`
+- Docker volumes for PostgreSQL data: `postgres-data`
+- Application logs: `docker/logs/`
 - Configuration: `application-prod.yaml` (keep in a secure vault, not git)
 
 ## Monitoring

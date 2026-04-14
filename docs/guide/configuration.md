@@ -6,9 +6,9 @@ AppForge uses Spring Boot's profile-based configuration system with a custom `ap
 
 | Profile | File | Database | Redis | Flyway | Captcha |
 |---------|------|----------|-------|--------|---------|
-| **dev** (default) | `application-dev.yaml` | H2 (file-based) | Embedded | Disabled | Disabled |
-| **test** | `application-test.yaml` | MySQL | Real Redis | Enabled | Enabled |
-| **prod** | `application-prod.yaml` | MySQL (master/slave) | Real Redis | Enabled | Enabled |
+| **dev** (default) | `application-dev.yaml` | Testcontainers PostgreSQL | Testcontainers Redis | Disabled | Disabled |
+| **test** | `application-test.yaml` | PostgreSQL | Real Redis | Enabled | Enabled |
+| **prod** | `application-prod.yaml` | PostgreSQL (master/slave) | Real Redis | Enabled | Enabled |
 
 Switch profiles via environment variable or JVM argument:
 
@@ -91,8 +91,9 @@ app-forge:
 ```yaml
 app-forge:
   embedded:
-    redis: true                       # Start embedded Redis via Testcontainers
-    h2-init: true                     # Load H2 seed data on startup
+    redis: true                       # Start Redis via Testcontainers
+    postgresql: true                  # Start PostgreSQL via Testcontainers
+    minio: true                       # Start MinIO (S3) via Testcontainers
 ```
 
 ### Data Sensitivity
@@ -107,7 +108,7 @@ app-forge:
 
 AppForge uses `dynamic-datasource-spring-boot4-starter` for multi-datasource support with master/slave routing.
 
-### Dev Profile (H2)
+### Dev Profile (Testcontainers PostgreSQL)
 
 ```yaml
 spring:
@@ -117,18 +118,22 @@ spring:
       strict: false
       datasource:
         user_master:
-          driver-class-name: org.h2.Driver
-          url: jdbc:h2:file:~/.h2/user;AUTO_SERVER=TRUE;MODE=MySQL
-          username: sa
-          password: ""
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://${TESTCONTAINERS_PG_HOST}:${TESTCONTAINERS_PG_PORT}/appforge
+          username: appforge
+          password: appforge
         user_slave:
-          driver-class-name: org.h2.Driver
-          url: jdbc:h2:file:~/.h2/user;AUTO_SERVER=TRUE;MODE=MySQL
-          username: sa
-          password: ""
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://${TESTCONTAINERS_PG_HOST}:${TESTCONTAINERS_PG_PORT}/appforge
+          username: appforge
+          password: appforge
 ```
 
-### Production Profile (MySQL)
+::: tip
+In dev mode, Testcontainers automatically starts PostgreSQL and injects the connection properties. You do not need to configure these values manually.
+:::
+
+### Production Profile (PostgreSQL)
 
 ```yaml
 spring:
@@ -138,13 +143,13 @@ spring:
       strict: false
       datasource:
         user_master:
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://master-host:3306/appforge?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://master-host:5432/appforge
           username: ${DB_USERNAME}
           password: ${DB_PASSWORD}
         user_slave:
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://slave-host:3306/appforge?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://slave-host:5432/appforge
           username: ${DB_USERNAME}
           password: ${DB_PASSWORD}
 ```
@@ -165,6 +170,38 @@ spring:
 ```
 
 See [Database Migration](./database-migration.md) for the full Flyway guide.
+
+## File Storage Configuration
+
+AppForge supports file upload/download with two backend options: **local** filesystem and **S3-compatible** storage (e.g., MinIO).
+
+### Local Storage
+
+```yaml
+app-forge:
+  file-storage:
+    type: local
+    local:
+      base-path: /data/appforge/uploads    # Directory for stored files
+```
+
+### S3 / MinIO Storage
+
+```yaml
+app-forge:
+  file-storage:
+    type: s3
+    s3:
+      endpoint: http://localhost:9000       # MinIO or S3 endpoint
+      access-key: ${MINIO_ACCESS_KEY}
+      secret-key: ${MINIO_SECRET_KEY}
+      bucket: appforge                      # Default bucket name
+      region: us-east-1                     # AWS region (or leave default for MinIO)
+```
+
+::: tip
+In dev mode, MinIO is auto-started via Testcontainers. The S3 endpoint and credentials are injected automatically — no manual configuration needed.
+:::
 
 ## Logging
 

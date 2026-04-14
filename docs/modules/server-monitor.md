@@ -91,7 +91,7 @@ The monitoring page displays the server metrics in a visual dashboard with:
 3. JVM metrics are collected from `Runtime.getRuntime()` and `ManagementFactory`
 4. All data is formatted and returned as a single JSON response
 
-Oshi is a pure Java library with no native dependencies, making it compatible with both JVM and GraalVM Native Image deployments.
+Oshi is a pure Java library with no native dependencies, making it compatible with both JVM and Native Image (Liberica NIK) deployments.
 
 ## Performance Notes
 

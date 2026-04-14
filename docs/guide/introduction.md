@@ -8,26 +8,27 @@ Most open-source admin frameworks in the Java ecosystem are stuck on older stack
 
 ### Core Highlights
 
-- **Spring Boot 4.0.5 + Java 21** — virtual threads enabled by default for massive concurrency without reactive complexity
-- **GraalVM Native Image** — optional ahead-of-time compilation for ~100ms startup and ~50MB memory footprint
+- **Spring Boot 4.0.5 + Java 25** — virtual threads enabled by default for massive concurrency without reactive complexity
+- **BellSoft Liberica NIK 25 Native Image** — optional ahead-of-time compilation for ~100ms startup and ~50MB memory footprint
 - **Vue 3 + Vite 8** — instant HMR, tree-shaking, and TypeScript-first frontend development
 - **Clean Architecture** — domain-driven multi-module Gradle project, not a monolithic `src/` dump
 - **Flyway Migrations** — version-controlled schema management instead of manual SQL scripts
 - **Real-time Server Monitoring** — CPU, memory, JVM, and disk metrics via Oshi, viewable in the admin panel
-- **Dual Docker Deployment** — choose between Native Image (fast startup) or JVM (easy debugging)
+- **Dual Docker Deployment** — choose between Native Image (fast startup) or JVM with Leyden CDS (easy debugging)
+- **File Upload/Download** — pluggable storage backends with local filesystem and S3 (MinIO) support
 
 ## Comparison with Similar Projects
 
 | Feature | AppForge | RuoYi | JeecgBoot | AgileBoot |
 |---------|----------|-------|-----------|-----------|
 | Spring Boot | **4.0.5** | 2.x | 3.x | 3.x |
-| Java Version | **21 (virtual threads)** | 8 | 8/17 | 17 |
+| Java Version | **25 (Azul Zulu, virtual threads)** | 8 | 8/17 | 17 |
 | Build Tool | **Gradle 9.4.1** | Maven | Maven | Maven |
 | Frontend | **Vue 3 + Vite 8** | Vue 3 + Vite | Vue 3 + Vite | Vue 3 + Vite |
 | CSS Framework | **TailwindCSS 4** | Element Plus only | Ant Design Vue | Element Plus |
 | Architecture | **DDD multi-module** | Monolithic packages | Code generation focused | Layered |
 | DB Migration | **Flyway** | Manual SQL | Liquibase (optional) | Manual SQL |
-| Native Image | **Yes (~100ms startup)** | No | No | No |
+| Native Image | **Yes (Liberica NIK 25, ~100ms startup)** | No | No | No |
 | ORM | **Spring Data JPA + QueryDSL** | MyBatis | MyBatis-Plus | MyBatis-Plus |
 | Server Monitor | **Oshi (built-in)** | Oshi | Separate module | No |
 | Multi-datasource | **dynamic-datasource (master/slave)** | Druid only | Dynamic datasource | Single |

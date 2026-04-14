@@ -7,7 +7,7 @@ A detailed breakdown of every major technology used in AppForge.
 | Category | Technology | Version | Purpose |
 |----------|-----------|---------|---------|
 | Framework | Spring Boot | 4.0.5 | Application framework |
-| Language | Java | 21 | Virtual threads, pattern matching, records |
+| Language | Java (Azul Zulu) | 25 | Virtual threads, pattern matching, records, stable values |
 | Build | Gradle | 9.4.1 | Build tool with configuration cache |
 | Security | Spring Security | 7.x | Authentication and authorization |
 | ORM | Spring Data JPA | 4.x | Data access layer |
@@ -17,8 +17,8 @@ A detailed breakdown of every major technology used in AppForge.
 | API Docs | SpringDoc OpenAPI | 2.8.11 | Swagger UI and OpenAPI 3.0 spec |
 | DB Migration | Flyway | 11.8.0 | Schema version control |
 | System Monitor | Oshi | 6.8.1 | CPU, memory, disk, OS monitoring |
-| Database (dev) | H2 | 2.4.240 | Embedded database for development |
-| Database (prod) | MySQL | 8.x | Production relational database |
+| Database | PostgreSQL | 17.x | Relational database (all environments) |
+| File Storage | AWS S3 SDK | 2.x | File upload/download with S3-compatible backends (MinIO) |
 | Cache | Redis | 7.x | Session cache, data caching |
 | Connection Pool | Druid | (via dynamic-datasource) | Connection pooling and monitoring |
 | Captcha | Kaptcha | 2.3.2 | Login captcha (text + math) |
@@ -32,7 +32,8 @@ A detailed breakdown of every major technology used in AppForge.
 | Tracing | Micrometer + OpenTelemetry | 1.5.6 / 1.52.0 | Distributed tracing and metrics |
 | Testing | JUnit 6 | 6.0.3 | Unit testing framework |
 | Testing | Spock | 2.4-groovy-5.0 | BDD-style testing with Groovy 5 |
-| Testing | Testcontainers | 2.0.4 | Integration tests with Docker containers |
+| Testing | Testcontainers | 2.0.4 | Integration tests with Docker containers (PostgreSQL, Redis, MinIO) |
+| Testing | RestClient Integration | — | 15 REST API integration tests for user/role/dept CRUD |
 | Code Style | Spotless + Google Java Style | — | Automated code formatting |
 | Boilerplate | Lombok | 1.18.44 | Annotation-based code generation |
 
@@ -57,7 +58,8 @@ A detailed breakdown of every major technology used in AppForge.
 |-----------|-----------|---------|
 | Reverse Proxy | Nginx | Static file serving, API proxy |
 | Containerization | Docker + Docker Compose | Deployment orchestration |
-| Native Compilation | GraalVM | Ahead-of-time compilation for fast startup |
+| Native Compilation | BellSoft Liberica NIK 25 | Ahead-of-time native image compilation for fast startup |
+| CDS Optimization | Project Leyden (CDS) | Class Data Sharing for faster JVM startup |
 | Observability | OTLP (OpenTelemetry Protocol) | Tracing and metrics export |
 | Monitoring | Spring Boot Actuator | Health, metrics, Prometheus endpoints |
 

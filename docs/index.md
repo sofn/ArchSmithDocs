@@ -18,8 +18,8 @@ hero:
 
 features:
   - icon: 🚀
-    title: Spring Boot 4 + Java 21
-    details: Built on the latest Spring Boot 4 with Java 21 virtual threads, GraalVM Native Image support, and Spring Security.
+    title: Spring Boot 4 + Java 25
+    details: Built on the latest Spring Boot 4 with Java 25 virtual threads, Liberica NIK Native Image support, and Spring Security.
   - icon: 🎨
     title: Vue 3 Admin UI
     details: Beautiful admin interface based on vue-pure-admin with Element Plus, Tailwind CSS, and dynamic menu routing.
@@ -34,5 +34,5 @@ features:
     details: Dynamic datasource routing with read/write splitting. Flyway migration for production schema management.
   - icon: 🐳
     title: Docker Native & JVM
-    details: Dual deployment modes — GraalVM Native Image (~100ms startup) or standard JVM. One-command deployment.
+    details: Dual deployment modes — Liberica NIK 25 Native Image (~100ms startup) or JVM with Project Leyden CDS. One-command deployment.
 ---

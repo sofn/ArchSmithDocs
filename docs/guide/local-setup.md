@@ -2,23 +2,23 @@
 
 Detailed instructions for setting up your development environment.
 
-## Java 21
+## Java 25
 
-AppForge requires Java 21. We recommend using [SDKMAN](https://sdkman.io/) to manage JDK installations:
+AppForge requires Java 25. We recommend using [SDKMAN](https://sdkman.io/) to manage JDK installations:
 
 ```bash
 # Install SDKMAN
 curl -s "https://get.sdkman.io" | bash
 
-# Install Java 21
-sdk install java 21.0.7-tem
+# Install Azul Zulu 25
+sdk install java 25-zulu
 
 # Verify
 java -version
 echo $JAVA_HOME
 ```
 
-Alternatively, download directly from [Adoptium](https://adoptium.net/) or [Oracle](https://www.oracle.com/java/technologies/downloads/#java21).
+Alternatively, download directly from [Azul Zulu](https://www.azul.com/downloads/?version=java-25-ea&package=jdk) or [Adoptium](https://adoptium.net/).
 
 ::: warning
 Ensure `JAVA_HOME` is set correctly. Gradle will fail with a clear error if it detects a different Java version.
@@ -30,7 +30,7 @@ Ensure `JAVA_HOME` is set correctly. Gradle will fail with a clear error if it d
 
 1. **Open project**: File → Open → select the `AppForge/` root directory
 2. **Gradle import**: IntelliJ auto-detects `build.gradle.kts` and imports all modules
-3. **JDK setup**: File → Project Structure → Project SDK → select Java 21
+3. **JDK setup**: File → Project Structure → Project SDK → select Java 25
 4. **Lombok plugin**: Settings → Plugins → search "Lombok" → Install
 5. **Annotation processing**: Settings → Build → Compiler → Annotation Processors → Enable
 6. **Code style**: Import Google Java Style (enforced by Spotless)
@@ -38,7 +38,7 @@ Ensure `JAVA_HOME` is set correctly. Gradle will fail with a clear error if it d
 ### VS Code
 
 1. Install extensions: `Extension Pack for Java`, `Gradle for Java`
-2. Set `java.configuration.runtimes` in settings to point to JDK 21
+2. Set `java.configuration.runtimes` in settings to point to JDK 25
 3. Install Lombok support: `vscjava.vscode-lombok`
 
 ## Gradle Tips
@@ -76,14 +76,14 @@ When running with the default `dev` profile, the following are automatically con
 
 | Feature | Behavior |
 |---------|----------|
-| Database | H2 file-based (`~/.h2/user`, `~/.h2/task`) with MySQL compatibility mode |
-| Redis | Embedded Redis via Testcontainers (auto-started) |
+| Database | Testcontainers PostgreSQL (auto-started via Docker) |
+| Redis | Testcontainers Redis (auto-started via Docker) |
+| File Storage | Testcontainers MinIO (S3-compatible, auto-started via Docker) |
 | Schema | Hibernate DDL `auto=update` (auto-creates tables) |
 | Seed Data | Loaded automatically via `InitDbMockServer` |
 | Flyway | Disabled (not needed for dev) |
 | Captcha | Disabled (skip captcha on login) |
 | DevTools | Hot reload enabled with LiveReload on port 35729 |
-| H2 Console | Available at `http://localhost:8080/h2-console` |
 | Swagger UI | Available at `http://localhost:8080/swagger-ui/index.html` |
 | Tracing | 100% sampling to local OTLP endpoint |
 
@@ -99,18 +99,21 @@ Excluded from restart:
 - `static/**`
 - `public/**`
 
-## H2 Database Console
+## Testcontainers (Dev Services)
 
-Access the H2 web console for direct SQL queries during development:
+In dev mode, Docker containers for PostgreSQL, Redis, and MinIO are automatically started by Testcontainers when you run `./gradlew server-admin:bootRun`. No manual setup is required.
 
-1. Open `http://localhost:8080/h2-console`
-2. Use these connection settings:
+::: tip
+Make sure Docker Desktop (or Docker Engine) is running before starting the backend. Testcontainers will pull the required images on first launch.
+:::
 
-| Setting | Value |
-|---------|-------|
-| JDBC URL | `jdbc:h2:file:~/.h2/user;AUTO_SERVER=TRUE;MODE=MySQL` |
-| Username | `sa` |
-| Password | *(empty)* |
+The auto-started services are:
+
+| Service | Container Image | Purpose |
+|---------|----------------|---------|
+| PostgreSQL | `postgres:17` | Primary database |
+| Redis | `redis:7-alpine` | Session cache, data caching |
+| MinIO | `minio/minio` | S3-compatible file storage |
 
 ## Frontend Development
 
@@ -136,11 +139,11 @@ The frontend dev server proxies API requests to `http://localhost:8080` by defau
 
 | Problem | Solution |
 |---------|----------|
-| `Unsupported class file major version 68` | Wrong Java version — ensure JAVA_HOME points to JDK 21 |
+| `Unsupported class file major version 69` | Wrong Java version — ensure JAVA_HOME points to JDK 25 |
 | Port 8080 already in use | Kill the existing process or change `server.port` in YAML |
-| H2 lock error | Delete `~/.h2/` directory and restart |
+| Testcontainers startup failure | Ensure Docker is running; check `docker ps` and Docker logs |
 | Gradle build hangs | Run `./gradlew --stop` to kill daemon, then rebuild |
-| Redis connection refused | The embedded Redis should start automatically — check logs for errors |
+| Redis connection refused | Ensure Docker is running — Testcontainers auto-starts Redis |
 
 ## Related Pages
 
