@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'AppForge',
   description: 'AppForge Documentation',
-  base: '/AppForgeDocs/',
+  base: '/',
 
   themeConfig: {
     nav: [
