@@ -1,0 +1,110 @@
+# Role & Permission
+
+The role and permission system provides fine-grained access control with menu-based permissions and button-level authorization.
+
+## Features
+
+- Role CRUD with status management
+- Menu permission tree for each role
+- Button-level permission control via `permissions` array
+- Duplicate role key/name detection
+- Role-menu relationship management
+
+## Data Model
+
+### SysRole (`sys_role`)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| roleId | Long | Primary key |
+| roleName | String | Display name (e.g., "Administrator") |
+| roleKey | String | Unique identifier (e.g., "admin") |
+| roleSort | Integer | Sort order |
+| status | Integer | Status (0: disabled, 1: enabled) |
+| remark | String | Notes |
+
+### SysRoleMenu (`sys_role_menu`)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| roleId | Long | Role ID |
+| menuId | Long | Menu ID |
+
+This is a many-to-many join table linking roles to their permitted menus.
+
+## API Endpoints
+
+### Admin API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/admin-api/list-all-role` | List all roles |
+| POST | `/admin-api/list-role-ids` | Get role IDs for a user |
+| POST | `/admin-api/role` | List roles (paginated) |
+| POST | `/admin-api/role/create` | Create role |
+| PUT | `/admin-api/role/update` | Update role |
+| POST | `/admin-api/role/delete` | Delete role(s) |
+| POST | `/admin-api/role/status` | Toggle role status |
+| POST | `/admin-api/role/save-menu` | Save menu permissions for role |
+| POST | `/admin-api/role-menu` | List role-menu data |
+| POST | `/admin-api/role-menu-ids` | Get menu IDs for a role |
+
+### RESTful API
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/system/role` | List all roles |
+| GET | `/system/role/{id}` | Get role by ID |
+| GET | `/system/role/key/{roleKey}` | Get role by key |
+| GET | `/system/role/all` | List all roles (no pagination) |
+| GET | `/system/role/active` | List active roles |
+| POST | `/system/role` | Create role |
+| PUT | `/system/role/{id}` | Update role |
+| DELETE | `/system/role/{id}` | Delete role |
+| GET | `/system/role/exists/key` | Check if role key exists |
+| GET | `/system/role/exists/name` | Check if role name exists |
+
+## Permission Model
+
+### Menu-Level Permissions
+
+Each role is assigned a set of menus. When a user logs in, the system loads all menus associated with their roles to build the sidebar navigation. Menus not in the user's role set are hidden.
+
+### Button-Level Permissions
+
+Menu items can have `isButton = true` with a `permission` string (e.g., `system:user:create`). These permissions are returned in the `meta.auths` array of the route data.
+
+On the frontend, use the `hasPerms()` utility to conditionally render buttons:
+
+```vue
+<template>
+  <el-button v-if="hasPerms(['system:user:create'])">
+    Create User
+  </el-button>
+</template>
+```
+
+### Permission Format
+
+Permissions follow the pattern: `module:entity:action`
+
+| Permission | Description |
+|-----------|-------------|
+| `system:user:create` | Create user |
+| `system:user:update` | Update user |
+| `system:user:delete` | Delete user |
+| `system:role:create` | Create role |
+| `system:menu:create` | Create menu |
+
+## Role Assignment Flow
+
+1. Admin creates a role and assigns menu permissions via the permission tree
+2. Admin assigns roles to users in the user management page
+3. On login, the backend fetches the user's roles and their combined menu permissions
+4. The frontend builds the sidebar and button visibility based on these permissions
+
+## Related Pages
+
+- [User Management](./user-management.md) — user-role assignment
+- [Menu Management](./menu-management.md) — menu types and structure
+- [Authentication](./authentication.md) — login and permission loading

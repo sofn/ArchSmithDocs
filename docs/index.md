@@ -3,21 +3,36 @@ layout: home
 
 hero:
   name: AppForge
-  text: Build Apps Faster
-  tagline: A powerful tool to accelerate your application development
+  text: Enterprise Admin Platform
+  tagline: Production-ready admin system built with Spring Boot 4 + Vue 3. From zero to full-stack in minutes.
+  image:
+    src: /logo.svg
+    alt: AppForge
   actions:
     - theme: brand
       text: Get Started
-      link: /guide/getting-started
+      link: /guide/quick-start
     - theme: alt
       text: View on GitHub
       link: https://github.com/sofn/AppForge
 
 features:
-  - title: Easy to Use
-    details: Simple and intuitive API design, get started in minutes.
-  - title: High Performance
-    details: Optimized for speed and efficiency.
-  - title: Extensible
-    details: Flexible plugin system to extend functionality.
+  - icon: 🚀
+    title: Spring Boot 4 + Java 21
+    details: Built on the latest Spring Boot 4 with Java 21 virtual threads, GraalVM Native Image support, and Spring Security.
+  - icon: 🎨
+    title: Vue 3 Admin UI
+    details: Beautiful admin interface based on vue-pure-admin with Element Plus, Tailwind CSS, and dynamic menu routing.
+  - icon: 🔐
+    title: Complete RBAC
+    details: Role-based access control with JWT authentication, dynamic menus, button-level permissions, and token refresh.
+  - icon: 📊
+    title: Server Monitoring
+    details: Real-time CPU, memory, JVM, disk monitoring powered by Oshi with auto-refresh dashboards.
+  - icon: 🗄️
+    title: Multi-Datasource + Flyway
+    details: Dynamic datasource routing with read/write splitting. Flyway migration for production schema management.
+  - icon: 🐳
+    title: Docker Native & JVM
+    details: Dual deployment modes — GraalVM Native Image (~100ms startup) or standard JVM. One-command deployment.
 ---
