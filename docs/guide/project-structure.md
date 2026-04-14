@@ -1,4 +1,4 @@
-Open [http://localhost:8848](http://localhost:8848) in your browser and log in with:
+Open `http://localhost:8848` in your browser and log in with:
 
 | Field | Value |
 |-------|-------|
