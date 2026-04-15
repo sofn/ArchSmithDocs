@@ -46,6 +46,7 @@ export default defineConfig({
             { text: 'Local Setup', link: '/guide/local-setup' },
             { text: 'Configuration', link: '/guide/configuration' },
             { text: 'Database Migration', link: '/guide/database-migration' },
+            { text: 'Dependency Management', link: '/guide/dependency-management' },
           ]
         }
       ],
@@ -74,6 +75,7 @@ export default defineConfig({
           text: 'Deployment',
           items: [
             { text: 'Docker Compose', link: '/deploy/docker' },
+            { text: 'Test Environment', link: '/deploy/test-environment' },
             { text: 'Production Guide', link: '/deploy/production' },
           ]
         }

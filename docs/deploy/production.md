@@ -115,14 +115,47 @@ management:
 
 ## Database Setup
 
-### First Deployment
+### Install PostgreSQL 17
+
+Option A: Docker (recommended for most deployments):
 
 ```bash
-# Create database on PostgreSQL master
-psql -h <master-host> -U postgres -c \
-  "CREATE DATABASE archsmith;"
+docker run -d --name archsmith-pg \
+  --restart unless-stopped \
+  -e POSTGRES_USER=archsmith \
+  -e POSTGRES_PASSWORD=${DB_PASSWORD} \
+  -e POSTGRES_INITDB_ARGS="--encoding=UTF8 --locale=en_US.UTF-8" \
+  -v postgres-data:/var/lib/postgresql/data \
+  -p 5432:5432 postgres:17-alpine
+```
 
-# Start application — Flyway creates all tables and seeds data
+Option B: Native install (Ubuntu):
+
+```bash
+sudo apt install -y postgresql-17
+sudo -u postgres createuser --createdb archsmith
+sudo -u postgres psql -c "ALTER USER archsmith PASSWORD '<your-password>';"
+```
+
+### Create Databases
+
+```bash
+psql -h <master-host> -U archsmith -c \
+  "CREATE DATABASE archsmith_user ENCODING 'UTF8' LC_COLLATE 'en_US.UTF-8' LC_CTYPE 'en_US.UTF-8';"
+```
+
+### Master/Slave Replication
+
+For read/write split with `dynamic-datasource`, set up PostgreSQL streaming replication between master and slave instances. ArchSmith routes queries automatically via the `@DS` annotation and datasource groups configured in `application-prod.yaml`.
+
+Refer to the [PostgreSQL Replication Documentation](https://www.postgresql.org/docs/17/high-availability.html) for detailed setup instructions.
+
+### First Deployment
+
+On first startup, Flyway creates all tables and seeds initial data automatically:
+
+```bash
+# Start application — Flyway runs V1 (schema), V2 (data), V3 (menus)
 SPRING_PROFILES_ACTIVE=prod java -jar server-admin.jar
 ```
 
@@ -178,7 +211,14 @@ If using AWS ALB, GCP Load Balancer, or similar, terminate SSL at the load balan
 
 ```bash
 # Daily automated backup
-pg_dump -h <master-host> -U archsmith archsmith | gzip > backup_$(date +%Y%m%d).sql.gz
+pg_dump -h <master-host> -U archsmith archsmith_user | gzip > backup_$(date +%Y%m%d).sql.gz
+```
+
+Schedule via cron for daily backups and retain 30 days:
+
+```bash
+# /etc/cron.d/archsmith-backup
+0 2 * * * archsmith pg_dump -h localhost -U archsmith archsmith_user | gzip > /backups/archsmith_$(date +\%Y\%m\%d).sql.gz && find /backups -name "archsmith_*.sql.gz" -mtime +30 -delete
 ```
 
 ### Application Backup

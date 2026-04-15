@@ -1,41 +1,60 @@
-# Tech Stack
+# Tech Stack & Architecture Choices
 
-A detailed breakdown of every major technology used in ArchSmith.
+ArchSmith adopts modern technologies with clear rationale for each choice.
 
-## Backend
+## Runtime
 
-| Category | Technology | Version | Purpose |
-|----------|-----------|---------|---------|
-| Framework | Spring Boot | 4.0.5 | Application framework |
-| Language | Java (Azul Zulu) | 25 | Virtual threads, pattern matching, records, stable values |
-| Build | Gradle | 9.4.1 | Build tool with configuration cache |
-| Security | Spring Security | 7.x | Authentication and authorization |
-| ORM | Spring Data JPA | 4.x | Data access layer |
-| Query | QueryDSL | 5.1.0 | Type-safe dynamic queries |
-| JWT | JJWT | 0.12.6 | Token generation and validation |
-| Multi-datasource | dynamic-datasource | 4.5.0 | Master/slave routing, read/write split |
-| API Docs | SpringDoc OpenAPI | 2.8.11 | Swagger UI and OpenAPI 3.0 spec |
-| DB Migration | Flyway | 11.8.0 | Schema version control |
-| System Monitor | Oshi | 6.8.1 | CPU, memory, disk, OS monitoring |
-| Database | PostgreSQL | 17.x | Relational database (all environments) |
-| File Storage | AWS S3 SDK | 2.x | File upload/download with S3-compatible backends (MinIO) |
-| Cache | Redis | 7.x | Session cache, data caching |
-| Connection Pool | Druid | (via dynamic-datasource) | Connection pooling and monitoring |
-| Captcha | Kaptcha | 2.3.2 | Login captcha (text + math) |
-| Object Mapping | MapStruct | 1.6.3 | Compile-time bean mapping |
-| Utilities | Guava | 33.4.8 | Collections, caching, strings |
-| Utilities | Apache Commons | Lang 3.20, IO 2.19 | String/IO utilities |
-| IP Lookup | ip2region | 2.7.0 | Offline IP geolocation |
-| User Agent | UserAgentUtils | 1.21 | Browser/OS detection for login logs |
-| Serialization | Jackson | (Spring Boot managed) | JSON serialization |
-| Logging | Log4j2 | (Spring Boot managed) | Structured logging with Spring profiles |
-| Tracing | Micrometer + OpenTelemetry | 1.5.6 / 1.52.0 | Distributed tracing and metrics |
-| Testing | JUnit 6 | 6.0.3 | Unit testing framework |
-| Testing | Spock | 2.4-groovy-5.0 | BDD-style testing with Groovy 5 |
-| Testing | Testcontainers | 2.0.4 | Integration tests with Docker containers (PostgreSQL, Redis, MinIO) |
-| Testing | RestClient Integration | — | 15 REST API integration tests for user/role/dept CRUD |
-| Code Style | Spotless + Google Java Style | — | Automated code formatting |
-| Boilerplate | Lombok | 1.18.44 | Annotation-based code generation |
+| Technology | Version | Why |
+|-----------|---------|-----|
+| JDK | 25 (Azul Zulu) | ScopedValue, Structured Concurrency, Pattern Matching, Stream Gatherers, Virtual Threads |
+| Spring Boot | 4.0.5 | Spring Framework 7, Jakarta EE, Observation API, ProblemDetail (RFC 9457) |
+| Gradle | 9.4.1 | Configuration cache, Kotlin DSL, java-platform for BOM |
+
+## Database & Storage
+
+| Technology | Version | Why |
+|-----------|---------|-----|
+| PostgreSQL | 17 | GENERATED ALWAYS AS IDENTITY, advanced JSON, row-level security |
+| Flyway | 11.14 | Version-controlled schema migration, repeatable and undo support |
+| Redis | 7 | Session cache, rate limiting, distributed locks |
+| Dynamic Datasource | 4.5.0 | Master/slave routing, @DS annotation, group proxy for JPA |
+| AWS S3 SDK | 2.31 | File storage abstraction (works with MinIO in dev) |
+
+## Web & API
+
+| Technology | Version | Why |
+|-----------|---------|-----|
+| Spring Security | 7.x | SecurityFilterChain, JWT authentication, RBAC |
+| SpringDoc OpenAPI | 2.8 | Auto-generated Swagger UI, schema validation |
+| Jackson | 2.21 | JSON serialization, custom converters, sensitive data masking |
+| MapStruct | 1.6 | Compile-time type-safe DTO mapping, zero reflection |
+
+## Observability
+
+| Technology | Version | Why |
+|-----------|---------|-----|
+| Micrometer | 1.16 | Unified metrics API, Observation for metrics+tracing+logging |
+| OpenTelemetry | 1.55 | Distributed tracing, OTLP export |
+| Log4j2 | (Boot managed) | Async logging, structured output, Spring profile support |
+| Spring Actuator | 4.0 | Health checks, Prometheus metrics endpoint |
+
+## Code Quality
+
+| Technology | Version | Why |
+|-----------|---------|-----|
+| Spotless | 8.4 | Google Java Style (AOSP) enforcement on build |
+| google-java-format | 1.35 | Consistent formatting across team |
+| JSpecify | 1.0 | Standard null safety annotations (@NullMarked, @Nullable) |
+| Lombok | 1.18 | Reduce boilerplate (@Data, @Builder, @RequiredArgsConstructor) |
+
+## Testing
+
+| Technology | Version | Why |
+|-----------|---------|-----|
+| JUnit | 6.0 (Jupiter) | Modern assertions, parameterized tests |
+| Spock | 2.4 (Groovy 5) | BDD-style specs, data-driven testing, mocking |
+| Testcontainers | 2.0 | Auto-provisioned PostgreSQL, Redis, MinIO in dev/test |
+| RestClient | (Spring) | Integration tests against running application |
 
 ## Frontend
 
@@ -48,50 +67,33 @@ A detailed breakdown of every major technology used in ArchSmith.
 | State | Pinia | 3 | Vue 3 state management |
 | Router | Vue Router | 5 | SPA routing |
 | CSS | TailwindCSS | 4 | Utility-first CSS framework |
-| HTTP | Axios | — | HTTP client with interceptors |
-| i18n | vue-i18n | — | Internationalization |
-| Base Template | vue-pure-admin | — | Enterprise admin template |
+| HTTP | Axios | -- | HTTP client with interceptors |
+| i18n | vue-i18n | -- | Internationalization |
+| Base Template | vue-pure-admin | -- | Enterprise admin template |
 
-## Infrastructure
+## Deployment
 
-| Component | Technology | Purpose |
-|-----------|-----------|---------|
-| Reverse Proxy | Nginx | Static file serving, API proxy |
-| Containerization | Docker + Docker Compose | Deployment orchestration |
-| Native Compilation | BellSoft Liberica NIK 25 | Ahead-of-time native image compilation for fast startup |
-| CDS Optimization | Project Leyden (CDS) | Class Data Sharing for faster JVM startup |
-| Observability | OTLP (OpenTelemetry Protocol) | Tracing and metrics export |
-| Monitoring | Spring Boot Actuator | Health, metrics, Prometheus endpoints |
+| Technology | Why |
+|-----------|-----|
+| Docker + jlink | Minimal JRE (~60MB vs ~300MB full JDK) |
+| Project Leyden CDS | AOT cache for faster startup |
+| Liberica NIK 25 | Native Image option for instant startup |
+| Nginx | Reverse proxy, static file serving, SSL termination |
 
-## Version Management
+## JDK 25 Features Used
 
-All dependency versions are centrally managed in `dependencies/build.gradle.kts` using Gradle's `java-platform` plugin. This ensures consistent versions across all modules without version conflicts.
-
-```kotlin
-// dependencies/build.gradle.kts
-dependencies {
-    constraints {
-        api("com.baomidou:dynamic-datasource-spring-boot4-starter:4.5.0")
-        api("io.jsonwebtoken:jjwt-api:0.12.6")
-        api("com.querydsl:querydsl-jpa:5.1.0")
-        api("org.flywaydb:flyway-core:11.8.0")
-        // ... all versions in one place
-    }
-}
-```
-
-Individual modules reference the platform without specifying versions:
-
-```kotlin
-// domain/admin-user/build.gradle.kts
-dependencies {
-    implementation(platform(project(":dependencies")))
-    implementation("com.querydsl:querydsl-jpa")  // version from platform
-}
-```
+| Feature | Where | Benefit |
+|---------|-------|---------|
+| ScopedValue | ScopedValueContext | Replace ThreadLocal, virtual-thread safe, auto-cleanup |
+| Structured Concurrency | ServerMonitorService | Parallel system info collection, bounded lifecycle |
+| Pattern Matching switch | JsonUtil, ErrorHandler, ResultValueWrapper | Cleaner type dispatch, exhaustive checks |
+| Stream Gatherers | CollectionUtils.partition() | Built-in windowing, no external deps |
+| Virtual Threads | application.yaml | Scalable concurrency for I/O-bound work |
+| JSpecify Null Safety | Package-level @NullMarked | Compile-time null checking |
 
 ## Related Pages
 
-- [Project Structure](./project-structure.md) — how the modules are organized
-- [Configuration](./configuration.md) — runtime configuration for each technology
-- [Local Development Setup](./local-setup.md) — getting your IDE ready
+- [Project Structure](./project-structure.md) -- how the modules are organized
+- [Dependency Management](./dependency-management.md) -- centralized version control with Gradle BOMs
+- [Configuration](./configuration.md) -- runtime configuration for each technology
+- [Local Development Setup](./local-setup.md) -- getting your IDE ready
