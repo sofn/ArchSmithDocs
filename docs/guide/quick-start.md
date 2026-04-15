@@ -1,6 +1,6 @@
 # Quick Start
 
-Get AppForge running locally in under 5 minutes.
+Get ArchSmith running locally in under 5 minutes.
 
 ## Prerequisites
 
@@ -26,16 +26,16 @@ java -version
 
 ```bash
 # Backend
-git clone https://github.com/sofn/AppForge.git
+git clone https://github.com/sofn/ArchSmith.git
 
 # Frontend
-git clone https://github.com/sofn/AppForgeAdmin.git
+git clone https://github.com/sofn/ArchSmithAdmin.git
 ```
 
 ### 2. Start the Backend
 
 ```bash
-cd AppForge
+cd ArchSmith
 ./gradlew server-admin:bootRun
 ```
 

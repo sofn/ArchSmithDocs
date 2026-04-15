@@ -1,11 +1,11 @@
 # Project Structure
 
-AppForge follows a domain-driven, multi-module architecture. Each module has a clear responsibility and well-defined boundaries.
+ArchSmith follows a domain-driven, multi-module architecture. Each module has a clear responsibility and well-defined boundaries.
 
-## Backend (AppForge)
+## Backend (ArchSmith)
 
 ```
-AppForge/
+ArchSmith/
 ├── common/                          # Shared libraries
 │   ├── common-core/                 # Core utilities
 │   │   └── src/main/java/
@@ -22,7 +22,7 @@ AppForge/
 ├── infrastructure/                  # Cross-cutting concerns
 │   └── src/main/java/
 │       ├── auth/                    # Authentication service, JWT, login models
-│       ├── config/                  # AppForgeConfig, SwaggerConfig, CaptchaConfig
+│       ├── config/                  # ArchSmithConfig, SwaggerConfig, CaptchaConfig
 │       ├── db/                      # RedisUtil, GroupDataSourceProxy
 │       ├── frame/
 │       │   ├── context/             # RequestContext, RequestIDGenerator
@@ -86,10 +86,10 @@ AppForge/
 └── Dockerfile.native                # Native Docker image (Liberica NIK 25)
 ```
 
-## Frontend (AppForgeAdmin)
+## Frontend (ArchSmithAdmin)
 
 ```
-AppForgeAdmin/
+ArchSmithAdmin/
 ├── src/
 │   ├── api/                 # API endpoint definitions (Axios)
 │   ├── assets/              # Static assets (images, SVGs)

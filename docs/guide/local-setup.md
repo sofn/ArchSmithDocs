@@ -4,7 +4,7 @@ Detailed instructions for setting up your development environment.
 
 ## Java 25
 
-AppForge requires Java 25. We recommend using [SDKMAN](https://sdkman.io/) to manage JDK installations:
+ArchSmith requires Java 25. We recommend using [SDKMAN](https://sdkman.io/) to manage JDK installations:
 
 ```bash
 # Install SDKMAN
@@ -28,7 +28,7 @@ Ensure `JAVA_HOME` is set correctly. Gradle will fail with a clear error if it d
 
 ### IntelliJ IDEA (Recommended)
 
-1. **Open project**: File → Open → select the `AppForge/` root directory
+1. **Open project**: File → Open → select the `ArchSmith/` root directory
 2. **Gradle import**: IntelliJ auto-detects `build.gradle.kts` and imports all modules
 3. **JDK setup**: File → Project Structure → Project SDK → select Java 25
 4. **Lombok plugin**: Settings → Plugins → search "Lombok" → Install
@@ -54,7 +54,7 @@ Ensure `JAVA_HOME` is set correctly. Gradle will fail with a clear error if it d
 ./gradlew server-admin:bootRun
 
 # Run specific test class
-./gradlew :server-admin:test --tests "com.lesofn.appforge.*"
+./gradlew :server-admin:test --tests "com.lesofn.archsmith.*"
 
 # Check code formatting
 ./gradlew spotlessCheck
@@ -118,7 +118,7 @@ The auto-started services are:
 ## Frontend Development
 
 ```bash
-cd AppForgeAdmin
+cd ArchSmithAdmin
 
 # Install dependencies
 pnpm install

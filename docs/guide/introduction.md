@@ -1,10 +1,10 @@
-# What is AppForge?
+# What is ArchSmith?
 
-AppForge is a modern enterprise admin platform built with **Spring Boot 4** and **Vue 3**, designed for teams that want a production-ready management system with the latest Java and frontend technologies.
+ArchSmith is a modern enterprise admin platform built with **Spring Boot 4** and **Vue 3**, designed for teams that want a production-ready management system with the latest Java and frontend technologies.
 
-## Why AppForge?
+## Why ArchSmith?
 
-Most open-source admin frameworks in the Java ecosystem are stuck on older stacks — Spring Boot 2.x, Java 8, and Webpack-based frontends. AppForge takes a different approach: start fresh with the newest stable releases and apply clean architecture from day one.
+Most open-source admin frameworks in the Java ecosystem are stuck on older stacks — Spring Boot 2.x, Java 8, and Webpack-based frontends. ArchSmith takes a different approach: start fresh with the newest stable releases and apply clean architecture from day one.
 
 ### Core Highlights
 
@@ -19,7 +19,7 @@ Most open-source admin frameworks in the Java ecosystem are stuck on older stack
 
 ## Comparison with Similar Projects
 
-| Feature | AppForge | RuoYi | JeecgBoot | AgileBoot |
+| Feature | ArchSmith | RuoYi | JeecgBoot | AgileBoot |
 |---------|----------|-------|-----------|-----------|
 | Spring Boot | **4.0.5** | 2.x | 3.x | 3.x |
 | Java Version | **25 (Azul Zulu, virtual threads)** | 8 | 8/17 | 17 |

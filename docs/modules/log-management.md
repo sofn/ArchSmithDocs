@@ -1,6 +1,6 @@
 # Log Management
 
-AppForge provides built-in logging for both user operations and login attempts, enabling audit trails and security monitoring.
+ArchSmith provides built-in logging for both user operations and login attempts, enabling audit trails and security monitoring.
 
 ## Operation Logs
 

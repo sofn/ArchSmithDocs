@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'AppForge',
+  title: 'ArchSmith',
   description: 'Modern enterprise admin platform built with Spring Boot 4 + Vue 3',
   base: '/',
   lang: 'en-US',
@@ -14,7 +14,7 @@ export default defineConfig({
 
   themeConfig: {
     logo: '/logo.svg',
-    siteTitle: 'AppForge',
+    siteTitle: 'ArchSmith',
 
     nav: [
       { text: 'Guide', link: '/guide/introduction' },
@@ -23,8 +23,8 @@ export default defineConfig({
       {
         text: 'Links',
         items: [
-          { text: 'Backend (AppForge)', link: 'https://github.com/sofn/AppForge' },
-          { text: 'Frontend (AppForgeAdmin)', link: 'https://github.com/sofn/AppForgeAdmin' },
+          { text: 'Backend (ArchSmith)', link: 'https://github.com/sofn/ArchSmith' },
+          { text: 'Frontend (ArchSmithAdmin)', link: 'https://github.com/sofn/ArchSmithAdmin' },
         ]
       }
     ],
@@ -34,7 +34,7 @@ export default defineConfig({
         {
           text: 'Introduction',
           items: [
-            { text: 'What is AppForge?', link: '/guide/introduction' },
+            { text: 'What is ArchSmith?', link: '/guide/introduction' },
             { text: 'Quick Start', link: '/guide/quick-start' },
             { text: 'Tech Stack', link: '/guide/tech-stack' },
             { text: 'Project Structure', link: '/guide/project-structure' },
@@ -81,12 +81,12 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/sofn/AppForge' },
+      { icon: 'github', link: 'https://github.com/sofn/ArchSmith' },
     ],
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2024-present AppForge'
+      copyright: 'Copyright © 2024-present ArchSmith'
     },
 
     search: {
@@ -94,7 +94,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/sofn/AppForgeDocs/edit/master/docs/:path',
+      pattern: 'https://github.com/sofn/ArchSmithDocs/edit/master/docs/:path',
       text: 'Edit this page on GitHub'
     }
   }

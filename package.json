@@ -1,5 +1,5 @@
 {
-  "name": "appforgedocs",
+  "name": "archsmithdocs",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sofn/AppForgeDocs.git"
+    "url": "git+https://github.com/sofn/ArchSmithDocs.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sofn/AppForgeDocs/issues"
+    "url": "https://github.com/sofn/ArchSmithDocs/issues"
   },
-  "homepage": "https://github.com/sofn/AppForgeDocs#readme",
+  "homepage": "https://github.com/sofn/ArchSmithDocs#readme",
   "devDependencies": {
     "vitepress": "^1.6.4"
   }

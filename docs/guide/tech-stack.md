@@ -1,6 +1,6 @@
 # Tech Stack
 
-A detailed breakdown of every major technology used in AppForge.
+A detailed breakdown of every major technology used in ArchSmith.
 
 ## Backend
 

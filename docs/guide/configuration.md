@@ -1,6 +1,6 @@
 # Configuration
 
-AppForge uses Spring Boot's profile-based configuration system with a custom `app-forge` properties prefix.
+ArchSmith uses Spring Boot's profile-based configuration system with a custom `arch-smith` properties prefix.
 
 ## Profile System
 
@@ -35,13 +35,13 @@ server-admin/src/main/resources/
 `application-test.yaml` and `application-prod.yaml` are gitignored. Always copy from the `.example` files and fill in real values.
 :::
 
-## AppForge Properties (`app-forge.*`)
+## ArchSmith Properties (`arch-smith.*`)
 
 ### Core Settings
 
 ```yaml
-app-forge:
-  name: AppForge                      # Application name
+arch-smith:
+  name: ArchSmith                      # Application name
   version: 1.0.0                      # Version string
   copyright-year: 2025                # Footer copyright year
   captcha-type: math                  # Captcha type: "math" or "text"
@@ -51,7 +51,7 @@ app-forge:
 ### JWT Configuration
 
 ```yaml
-app-forge:
+arch-smith:
   jwt:
     secret: "your-base64-secret-key"  # HMAC-SHA512 signing key
     expire-seconds: 604800            # Token TTL (default: 7 days)
@@ -64,7 +64,7 @@ Always change `jwt.secret` in production! The default key is for development onl
 ### Token Configuration
 
 ```yaml
-app-forge:
+arch-smith:
   token:
     header: Authorization             # HTTP header name
     auto-refresh-time: 20             # Auto-refresh threshold (minutes)
@@ -73,7 +73,7 @@ app-forge:
 ### Captcha Configuration
 
 ```yaml
-app-forge:
+arch-smith:
   captcha:
     enabled: true                     # Enable/disable login captcha
 ```
@@ -81,7 +81,7 @@ app-forge:
 ### Server Monitor
 
 ```yaml
-app-forge:
+arch-smith:
   monitor:
     enabled: true                     # Enable Oshi system monitoring
 ```
@@ -89,7 +89,7 @@ app-forge:
 ### Embedded Services (Dev Only)
 
 ```yaml
-app-forge:
+arch-smith:
   embedded:
     redis: true                       # Start Redis via Testcontainers
     postgresql: true                  # Start PostgreSQL via Testcontainers
@@ -99,14 +99,14 @@ app-forge:
 ### Data Sensitivity
 
 ```yaml
-app-forge:
+arch-smith:
   sensitive:
     enabled: true                     # Enable sensitive data masking in responses
 ```
 
 ## Datasource Configuration
 
-AppForge uses `dynamic-datasource-spring-boot4-starter` for multi-datasource support with master/slave routing.
+ArchSmith uses `dynamic-datasource-spring-boot4-starter` for multi-datasource support with master/slave routing.
 
 ### Dev Profile (Testcontainers PostgreSQL)
 
@@ -119,14 +119,14 @@ spring:
       datasource:
         user_master:
           driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://${TESTCONTAINERS_PG_HOST}:${TESTCONTAINERS_PG_PORT}/appforge
-          username: appforge
-          password: appforge
+          url: jdbc:postgresql://${TESTCONTAINERS_PG_HOST}:${TESTCONTAINERS_PG_PORT}/archsmith
+          username: archsmith
+          password: archsmith
         user_slave:
           driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://${TESTCONTAINERS_PG_HOST}:${TESTCONTAINERS_PG_PORT}/appforge
-          username: appforge
-          password: appforge
+          url: jdbc:postgresql://${TESTCONTAINERS_PG_HOST}:${TESTCONTAINERS_PG_PORT}/archsmith
+          username: archsmith
+          password: archsmith
 ```
 
 ::: tip
@@ -144,12 +144,12 @@ spring:
       datasource:
         user_master:
           driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://master-host:5432/appforge
+          url: jdbc:postgresql://master-host:5432/archsmith
           username: ${DB_USERNAME}
           password: ${DB_PASSWORD}
         user_slave:
           driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://slave-host:5432/appforge
+          url: jdbc:postgresql://slave-host:5432/archsmith
           username: ${DB_USERNAME}
           password: ${DB_PASSWORD}
 ```
@@ -159,7 +159,7 @@ Use `@DS("group_name")` annotation for explicit datasource routing in service me
 ## Flyway Configuration
 
 ```yaml
-app-forge:
+arch-smith:
   flyway:
     enabled: true    # Enable Flyway migrations (test/prod only)
 
@@ -173,29 +173,29 @@ See [Database Migration](./database-migration.md) for the full Flyway guide.
 
 ## File Storage Configuration
 
-AppForge supports file upload/download with two backend options: **local** filesystem and **S3-compatible** storage (e.g., MinIO).
+ArchSmith supports file upload/download with two backend options: **local** filesystem and **S3-compatible** storage (e.g., MinIO).
 
 ### Local Storage
 
 ```yaml
-app-forge:
+arch-smith:
   file-storage:
     type: local
     local:
-      base-path: /data/appforge/uploads    # Directory for stored files
+      base-path: /data/archsmith/uploads    # Directory for stored files
 ```
 
 ### S3 / MinIO Storage
 
 ```yaml
-app-forge:
+arch-smith:
   file-storage:
     type: s3
     s3:
       endpoint: http://localhost:9000       # MinIO or S3 endpoint
       access-key: ${MINIO_ACCESS_KEY}
       secret-key: ${MINIO_SECRET_KEY}
-      bucket: appforge                      # Default bucket name
+      bucket: archsmith                      # Default bucket name
       region: us-east-1                     # AWS region (or leave default for MinIO)
 ```
 
