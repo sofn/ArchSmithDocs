@@ -18,7 +18,7 @@ ArchSmith 采用现代技术，每项选择都有清晰的考量。
 | Flyway | 11.14 | 版本化的数据库结构迁移，支持可重复和回退脚本 |
 | Redis | 7 | 会话缓存、限流、分布式锁 |
 | Dynamic Datasource | 4.5.0 | 主从路由、@DS 注解、JPA 组代理 |
-| AWS S3 SDK | 2.31 | 文件存储抽象（开发环境配合 MinIO 使用） |
+| AWS S3 SDK | 2.31 | 文件存储抽象（开发环境配合 RustFS 使用） |
 
 ## Web 与 API
 
@@ -53,7 +53,7 @@ ArchSmith 采用现代技术，每项选择都有清晰的考量。
 |-----------|---------|-----|
 | JUnit | 6.0 (Jupiter) | 现代断言、参数化测试 |
 | Spock | 2.4 (Groovy 5) | BDD 风格规范、数据驱动测试、Mock |
-| Testcontainers | 2.0 | 开发/测试环境自动配置 PostgreSQL、Redis、MinIO |
+| Testcontainers | 2.0 | 开发/测试环境自动配置 PostgreSQL、Redis、RustFS |
 | RestClient | （Spring 内置） | 针对运行中应用的集成测试 |
 
 ## 前端

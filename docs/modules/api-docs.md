@@ -94,7 +94,7 @@ location /v3/api-docs {
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/admin-api/file/upload` | Upload a file (local or S3/MinIO backend) |
+| POST | `/admin-api/file/upload` | Upload a file (local or S3/RustFS backend) |
 | GET | `/admin-api/file/download/{id}` | Download a file by ID |
 
 ### RESTful System API (`/system/`)

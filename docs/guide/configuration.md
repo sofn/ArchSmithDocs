@@ -93,7 +93,7 @@ arch-smith:
   embedded:
     redis: true                       # Start Redis via Testcontainers
     postgresql: true                  # Start PostgreSQL via Testcontainers
-    minio: true                       # Start MinIO (S3) via Testcontainers
+    rustfs: true                       # Start RustFS (S3) via Testcontainers
 ```
 
 ### Data Sensitivity
@@ -173,7 +173,7 @@ See [Database Migration](./database-migration.md) for the full Flyway guide.
 
 ## File Storage Configuration
 
-ArchSmith supports file upload/download with two backend options: **local** filesystem and **S3-compatible** storage (e.g., MinIO).
+ArchSmith supports file upload/download with two backend options: **local** filesystem and **S3-compatible** storage (e.g., RustFS).
 
 ### Local Storage
 
@@ -185,22 +185,22 @@ arch-smith:
       base-path: /data/archsmith/uploads    # Directory for stored files
 ```
 
-### S3 / MinIO Storage
+### S3 / RustFS Storage
 
 ```yaml
 arch-smith:
   file-storage:
     type: s3
     s3:
-      endpoint: http://localhost:9000       # MinIO or S3 endpoint
+      endpoint: http://localhost:9000       # RustFS or S3 endpoint
       access-key: ${MINIO_ACCESS_KEY}
       secret-key: ${MINIO_SECRET_KEY}
       bucket: archsmith                      # Default bucket name
-      region: us-east-1                     # AWS region (or leave default for MinIO)
+      region: us-east-1                     # AWS region (or leave default for RustFS)
 ```
 
 ::: tip
-In dev mode, MinIO is auto-started via Testcontainers. The S3 endpoint and credentials are injected automatically — no manual configuration needed.
+In dev mode, RustFS is auto-started via Testcontainers. The S3 endpoint and credentials are injected automatically — no manual configuration needed.
 :::
 
 ## Logging

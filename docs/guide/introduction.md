@@ -15,7 +15,7 @@ Most open-source admin frameworks in the Java ecosystem are stuck on older stack
 - **Flyway Migrations** — version-controlled schema management instead of manual SQL scripts
 - **Real-time Server Monitoring** — CPU, memory, JVM, and disk metrics via Oshi, viewable in the admin panel
 - **Dual Docker Deployment** — choose between Native Image (fast startup) or JVM with Leyden CDS (easy debugging)
-- **File Upload/Download** — pluggable storage backends with local filesystem and S3 (MinIO) support
+- **File Upload/Download** — pluggable storage backends with local filesystem and S3 (RustFS) support
 
 ## Comparison with Similar Projects
 

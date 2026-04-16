@@ -63,7 +63,7 @@ ArchSmith/
 │       │   └── error/               # Error controller
 │       └── resources/
 │           ├── application.yaml          # 共享基础配置
-│           ├── application-dev.yaml      # 开发环境配置（Testcontainers PostgreSQL、Redis、MinIO）
+│           ├── application-dev.yaml      # 开发环境配置（Testcontainers PostgreSQL、Redis、RustFS）
 │           ├── application-test.yaml.example
 │           ├── application-prod.yaml.example
 │           ├── db/migration/             # Flyway 迁移脚本

@@ -93,7 +93,7 @@ arch-smith:
   embedded:
     redis: true                       # Start Redis via Testcontainers
     postgresql: true                  # Start PostgreSQL via Testcontainers
-    minio: true                       # Start MinIO (S3) via Testcontainers
+    rustfs: true                       # Start RustFS (S3) via Testcontainers
 ```
 
 ### 数据脱敏
@@ -173,7 +173,7 @@ spring:
 
 ## 文件存储配置
 
-ArchSmith 支持文件上传/下载，提供两种后端选项：**本地**文件系统和 **S3 兼容**存储（如 MinIO）。
+ArchSmith 支持文件上传/下载，提供两种后端选项：**本地**文件系统和 **S3 兼容**存储（如 RustFS）。
 
 ### 本地存储
 
@@ -185,22 +185,22 @@ arch-smith:
       base-path: /data/archsmith/uploads    # Directory for stored files
 ```
 
-### S3 / MinIO 存储
+### S3 / RustFS 存储
 
 ```yaml
 arch-smith:
   file-storage:
     type: s3
     s3:
-      endpoint: http://localhost:9000       # MinIO or S3 endpoint
+      endpoint: http://localhost:9000       # RustFS or S3 endpoint
       access-key: ${MINIO_ACCESS_KEY}
       secret-key: ${MINIO_SECRET_KEY}
       bucket: archsmith                      # Default bucket name
-      region: us-east-1                     # AWS region (or leave default for MinIO)
+      region: us-east-1                     # AWS region (or leave default for RustFS)
 ```
 
 ::: tip
-在开发模式下，MinIO 通过 Testcontainers 自动启动。S3 端点和凭据会自动注入——无需手动配置。
+在开发模式下，RustFS 通过 Testcontainers 自动启动。S3 端点和凭据会自动注入——无需手动配置。
 :::
 
 ## 日志

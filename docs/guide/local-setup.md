@@ -78,7 +78,7 @@ When running with the default `dev` profile, the following are automatically con
 |---------|----------|
 | Database | Testcontainers PostgreSQL (auto-started via Docker) |
 | Redis | Testcontainers Redis (auto-started via Docker) |
-| File Storage | Testcontainers MinIO (S3-compatible, auto-started via Docker) |
+| File Storage | Testcontainers RustFS (S3-compatible, auto-started via Docker) |
 | Schema | Hibernate DDL `auto=update` (auto-creates tables) |
 | Seed Data | Loaded automatically via `InitDbMockServer` |
 | Flyway | Disabled (not needed for dev) |
@@ -101,7 +101,7 @@ Excluded from restart:
 
 ## Testcontainers (Dev Services)
 
-In dev mode, Docker containers for PostgreSQL, Redis, and MinIO are automatically started by Testcontainers when you run `./gradlew server-admin:bootRun`. No manual setup is required.
+In dev mode, Docker containers for PostgreSQL, Redis, and RustFS are automatically started by Testcontainers when you run `./gradlew server-admin:bootRun`. No manual setup is required.
 
 ::: tip
 Make sure Docker Desktop (or Docker Engine) is running before starting the backend. Testcontainers will pull the required images on first launch.
@@ -113,7 +113,7 @@ The auto-started services are:
 |---------|----------------|---------|
 | PostgreSQL | `postgres:17` | Primary database |
 | Redis | `redis:7-alpine` | Session cache, data caching |
-| MinIO | `minio/minio` | S3-compatible file storage |
+| RustFS | `rustfs/rustfs` | S3-compatible file storage |
 
 ## Frontend Development
 

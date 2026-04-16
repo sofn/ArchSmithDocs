@@ -18,7 +18,7 @@ ArchSmith adopts modern technologies with clear rationale for each choice.
 | Flyway | 11.14 | Version-controlled schema migration, repeatable and undo support |
 | Redis | 7 | Session cache, rate limiting, distributed locks |
 | Dynamic Datasource | 4.5.0 | Master/slave routing, @DS annotation, group proxy for JPA |
-| AWS S3 SDK | 2.31 | File storage abstraction (works with MinIO in dev) |
+| AWS S3 SDK | 2.31 | File storage abstraction (works with RustFS in dev) |
 
 ## Web & API
 
@@ -53,7 +53,7 @@ ArchSmith adopts modern technologies with clear rationale for each choice.
 |-----------|---------|-----|
 | JUnit | 6.0 (Jupiter) | Modern assertions, parameterized tests |
 | Spock | 2.4 (Groovy 5) | BDD-style specs, data-driven testing, mocking |
-| Testcontainers | 2.0 | Auto-provisioned PostgreSQL, Redis, MinIO in dev/test |
+| Testcontainers | 2.0 | Auto-provisioned PostgreSQL, Redis, RustFS in dev/test |
 | RestClient | (Spring) | Integration tests against running application |
 
 ## Frontend

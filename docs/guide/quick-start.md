@@ -13,7 +13,7 @@ Get ArchSmith running locally in under 5 minutes.
 | Docker | required | `docker -v` |
 
 ::: tip
-Make sure `JAVA_HOME` points to a JDK 25 installation. Docker is required for Testcontainers (PostgreSQL, Redis, MinIO auto-start in dev mode). You can verify with:
+Make sure `JAVA_HOME` points to a JDK 25 installation. Docker is required for Testcontainers (PostgreSQL, Redis, RustFS auto-start in dev mode). You can verify with:
 ```bash
 echo $JAVA_HOME
 java -version
@@ -42,7 +42,7 @@ cd ArchSmith
 The dev profile activates automatically, using:
 - **Testcontainers PostgreSQL** — auto-started via Docker (no manual DB setup needed)
 - **Testcontainers Redis** — auto-started via Docker (no Redis installation needed)
-- **Testcontainers MinIO** — S3-compatible file storage auto-started via Docker
+- **Testcontainers RustFS** — S3-compatible file storage auto-started via Docker
 - **Hibernate DDL auto** for schema creation
 - Pre-loaded seed data (admin user, roles, menus, etc.)
 

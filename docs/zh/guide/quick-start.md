@@ -13,7 +13,7 @@
 | Docker | 必需 | `docker -v` |
 
 ::: tip
-请确保 `JAVA_HOME` 指向 JDK 25 安装目录。Docker 是 Testcontainers（开发模式下自动启动 PostgreSQL、Redis、MinIO）所必需的。你可以通过以下命令验证：
+请确保 `JAVA_HOME` 指向 JDK 25 安装目录。Docker 是 Testcontainers（开发模式下自动启动 PostgreSQL、Redis、RustFS）所必需的。你可以通过以下命令验证：
 ```bash
 echo $JAVA_HOME
 java -version
@@ -42,7 +42,7 @@ cd ArchSmith
 开发环境配置会自动激活，使用以下服务：
 - **Testcontainers PostgreSQL** —— 通过 Docker 自动启动（无需手动配置数据库）
 - **Testcontainers Redis** —— 通过 Docker 自动启动（无需安装 Redis）
-- **Testcontainers MinIO** —— S3 兼容的文件存储，通过 Docker 自动启动
+- **Testcontainers RustFS** —— S3 兼容的文件存储，通过 Docker 自动启动
 - **Hibernate DDL auto** 自动创建数据库表结构
 - 预置种子数据（管理员用户、角色、菜单等）
 

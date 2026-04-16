@@ -94,7 +94,7 @@ location /v3/api-docs {
 
 | 方法 | 接口路径 | 描述 |
 |--------|----------|-------------|
-| POST | `/admin-api/file/upload` | 上传文件（本地或 S3/MinIO 后端） |
+| POST | `/admin-api/file/upload` | 上传文件（本地或 S3/RustFS 后端） |
 | GET | `/admin-api/file/download/{id}` | 根据 ID 下载文件 |
 
 ### RESTful 系统 API（`/system/`）

@@ -63,7 +63,7 @@ ArchSmith/
 │       │   └── error/               # Error controller
 │       └── resources/
 │           ├── application.yaml          # Shared base configuration
-│           ├── application-dev.yaml      # Dev profile (Testcontainers PostgreSQL, Redis, MinIO)
+│           ├── application-dev.yaml      # Dev profile (Testcontainers PostgreSQL, Redis, RustFS)
 │           ├── application-test.yaml.example
 │           ├── application-prod.yaml.example
 │           ├── db/migration/             # Flyway migration scripts
